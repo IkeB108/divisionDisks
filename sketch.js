@@ -9,17 +9,19 @@ const footerHeight = () => {
 const diskColors = {
   "green": [ [205, 255, 192], [72, 120, 87] ],
   "pink": [ [255, 183, 217], [184, 24, 115] ],
-  "blue": [ [179, 185, 255], [95, 84, 160] ]
+  "blue": [ [179, 185, 255], [95, 84, 160] ],
+  "other": [ [255, 255, 255], [0, 0, 0] ]
 }
 
 const diskColorMap = {
   "1": "blue",
   "10": "green",
-  "100": "pink"
+  "100": "pink",
+  "other": "other"
 }
 
-let dividend = 256
-let divisor = 4
+let dividend = 320
+let divisor = 3
 let divisorPiles = []
 const quotient = () => Math.floor(dividend / divisor)
 const digitsInDividend = () => dividend.toString().length
@@ -47,7 +49,7 @@ const startingPileBox = () => {
     placeValueContainers
   }
 }
-let startingPileDiskQuantityArray = [2, 5, 6]
+let startingPileDiskQuantityArray = [3, 2, 0]
 let divisorPileDiskQuantityArrays = []
 const factors = number => [...Array(number + 1).keys()].filter(i=>number % i === 0)
 function getDivisorPiles(){
@@ -166,12 +168,16 @@ function drawDiskQuantity(value, quantity, centerx, centery){
 
 function drawDisk(value, x, y){
   const diskWidth = width * 0.05
-  stroke( diskColors[diskColorMap[value]][1] ); strokeWeight(1);
+  let colorToUse = diskColors[diskColorMap["other"]]
+  if(Object.keys(diskColorMap).includes(value)){
+    colorToUse = diskColors[diskColorMap[value]]
+  }
+  stroke( colorToUse[1] ); strokeWeight(1);
   textAlign(CENTER, CENTER)
   // fill( [255, 0, 0] )
-  fill( diskColors[diskColorMap[value]][0] )
+  fill( colorToUse[0] )
   ellipse(x, y, diskWidth)
-  fill( diskColors[diskColorMap[value]][1] ); noStroke()
+  fill( colorToUse[1] ); noStroke()
   textSize(20 * (diskWidth/40) )
   text(value, x, y)
 }
@@ -222,7 +228,11 @@ function drawStartingPile(){
     if(nextPlaceValueIndex < startingPileDiskQuantityArray.length){
       const pvc = startBox.placeValueContainers[nextPlaceValueIndex]
       const value = "1" + "0".repeat(startingPileDiskQuantityArray.length - 1 - nextPlaceValueIndex)
-      const colorOfValue = diskColors[diskColorMap[ value ]][1]
+      
+      let colorOfValue = diskColors[diskColorMap["other"]][1]
+      if(Object.keys(diskColorMap).includes(value)){
+        colorOfValue = diskColors[diskColorMap[value]][1]
+      }
       stroke( colorOfValue ); noFill(); strokeWeight(3)
       rect(pvc.x, pvc.y, pvc.w, pvc.h)
       noStroke(); fill( colorOfValue );
