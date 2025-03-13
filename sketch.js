@@ -183,7 +183,7 @@ function drawDisk(value, x, y){
 }
 
 const getCanvasWidth = () => Math.min(windowWidth, 800)
-const getCanvasHeight = () => Math.max(windowHeight - footerHeight(), 500)
+const getCanvasHeight = () => Math.max(windowHeight - footerHeight(), 400)
 
 function setup(){
   const cnv = createCanvas(getCanvasWidth(), getCanvasHeight())
