@@ -26,9 +26,9 @@ let divisorPiles = []
 const quotient = () => Math.floor(dividend / divisor)
 const digitsInDividend = () => dividend.toString().length
 const canvasPadding = () => Math.min(height * 0.1, 20)
-const startingPileBoxHeight = () => height * 0.2
+const startingPileBoxHeight = () => height * 0.3
 const canvasCenter = () => ({ x: width / 2, y: height / 2 })
-const pileSpacing = () => Math.min(height * 0.1, 30)
+const pileSpacing = () => Math.min(height * 0.05, 10)
 const startingPileBox = () => {
   const h = startingPileBoxHeight()
   const w = Math.min(width - (canvasPadding() * 2), 500)
@@ -189,7 +189,6 @@ function setup(){
   const cnv = createCanvas(getCanvasWidth(), getCanvasHeight())
   cnv.parent("canvas-container")
   icursor = new MobileFriendlyCursor({
-    threeFingerConsole: true,
     manualSize: true
   })
   divisorPiles = getDivisorPiles()
@@ -285,6 +284,8 @@ let placeValueContainerAtCursorPressEnd = null
 let renamingIsAllowed = true
 
 function cursorPressStart( buttonPressed ){
+  if(icursor.allCursors.length > 1)return; //Do not register a cursorpressstart unless this is the first finger on the screen.
+  
   if(buttonPressed == "left"){
     placeValueContainerAtCursorPressStart = getPlaceValueContainerCollidingWithCursor()
     let pvcacps = placeValueContainerAtCursorPressStart
@@ -332,6 +333,8 @@ function getPlaceValueContainerCollidingWithCursor(){
 }
 
 function cursorPressEnd( buttonPressed ){
+  if(icursor.allCursors.length > 1)return; //Do not register a cursorpressend unless all fingers are off the screen. This prevents bugs
+  
   if(buttonPressed == "left"){
     if( valueBeingDraggedByUser == null )return
     placeValueContainerAtCursorPressEnd = getPlaceValueContainerCollidingWithCursor()
